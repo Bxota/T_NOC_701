@@ -40,7 +40,9 @@ def nearest_building_to(x, y, buildings_dict, candidate_bids):
     return best
 
 
-def select_with_capacity_by_distance(x, y, antenna_type, buildings_dict, candidate_bids):
+def select_with_capacity_by_distance(
+    x, y, antenna_type, buildings_dict, candidate_bids
+):
     """Sélectionne des bâtiments proches en respectant la capacité, triés par distance."""
     specs = ANTENNA_TYPES[antenna_type]
     r2 = specs["range"] * specs["range"]
@@ -108,18 +110,24 @@ def density_guided_cover(dataset, cell_size=250, top_cells_ratio=0.25):
 
             for a_type in ("MaxRange", "Density"):
                 neighbors = [
-                    bid for bid in grid.get_neighbors(ax, ay, ANTENNA_TYPES[a_type]["range"]) if bid in available
+                    bid
+                    for bid in grid.get_neighbors(
+                        ax, ay, ANTENNA_TYPES[a_type]["range"]
+                    )
+                    if bid in available
                 ]
                 if not neighbors:
                     continue
 
-                selected = select_with_capacity_by_distance(ax, ay, a_type, buildings, neighbors)
+                selected = select_with_capacity_by_distance(
+                    ax, ay, a_type, buildings, neighbors
+                )
                 if not selected:
                     continue
 
                 total_pop = sum(get_max_population(buildings[bid]) for bid in selected)
                 cost_on = ANTENNA_TYPES[a_type]["cost_on_building"]
-                score = (len(selected) ** 1.3) * (total_pop ** 0.7) / cost_on
+                score = (len(selected) ** 1.3) * (total_pop**0.7) / cost_on
 
                 if score > best_score:
                     best_score = score
@@ -149,7 +157,9 @@ def density_guided_cover(dataset, cell_size=250, top_cells_ratio=0.25):
 
 def solve_isogrid(dataset):
     """Pipeline spécialisé pour 5_isogrid: densité puis greedy optimisé, puis post-optimisation."""
-    antennas_dens, covered = density_guided_cover(dataset, cell_size=250, top_cells_ratio=0.25)
+    antennas_dens, covered = density_guided_cover(
+        dataset, cell_size=250, top_cells_ratio=0.25
+    )
 
     if len(covered) < len(dataset["buildings"]):
         buildings = {b["id"]: b for b in dataset["buildings"]}
@@ -200,7 +210,9 @@ def main():
 
     solution = solve_isogrid(dataset)
 
-    cost, is_valid, message = getSolutionScore(json.dumps(solution), json.dumps(dataset))
+    cost, is_valid, message = getSolutionScore(
+        json.dumps(solution), json.dumps(dataset)
+    )
 
     print(f"\n{'='*70}")
     print(f"RÉSULTAT FINAL (ISOGRID)")
