@@ -1,0 +1,22 @@
+{
+  "antennas": [
+    {
+      "type": "Density",
+      "x": 250,
+      "y": 180,
+      "buildings": [
+        3,
+        1
+      ]
+    },
+    {
+      "type": "Spot",
+      "x": 165,
+      "y": 225,
+      "buildings": [
+        0,
+        2
+      ]
+    }
+  ]
+}
